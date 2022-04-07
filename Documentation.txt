@@ -1,0 +1,57 @@
+L'API présentée dans ce projet propose une prévision du nombre de vélos qui rouleront au jour j+1 en fonction des variables fournis pour le jour j. 
+
+
+Les routes consultables sont : 
+ - /status : 
+ qui renvoie "1" si l'API fonctionne. 
+ 
+ - /permissions : 
+ qui renvoie "Good Id" / "Wrong Id" afin de tester l'authentification de l'utilisateur ; 
+ et nécessite et necessite les données username et password de la façon suivante data={'username':'Quinlan','password':5210}.
+ 
+ - /biketomorrow/LR : 
+ qui renvoie le nombre de vélos au lendemain selon le modèle de la régression linéaire ; 
+ et nécessite et necessite les données username, password et des données journalière de la façon suivante data = {'username':'Quinlan',  'password':5210, 'meteo':'rainy',  'temp':10, 'bike':327, 'day':'Wednesday'}
+ 
+ - /biketomorrow/KNR : 
+  qui renvoie le nombre de vélos au lendemain selon le modèle de la régression de proximité de voisinage ; 
+  et nécessite et necessite les données username, password et des données journalière de la façon suivante data = {'username':'Quinlan',  'password':5210, 'meteo':'rainy',  'temp':10, 'bike':327, 'day':'Wednesday'}
+ 
+  - /biketomorrow/LOGR : 
+  qui renvoie le nombre de vélos au lendemain selon le modèle de la régression logistique ; 
+  et nécessite et necessite les données username, password et des données journalière de la façon suivante data = {'username':'Quinlan',  'password':5210, 'meteo':'rainy',  'temp':10, 'bike':327, 'day':'Wednesday'}
+ 
+ - /metrics/LR : 
+  qui renvoie les données mse, rmse, mae, r2 d'entrainement et de test du modèle de régression linéaire ; 
+  et nécessite et necessite les données username, password et des données journalière de la façon suivante data = {'username':'Quinlan',  'password':5210, 'meteo':'rainy',  'temp':10, 'bike':327, 'day':'Wednesday'}
+  
+Si les données ne sont pas au bon format, une erreur est renvoyée précisant quelle donnée ne correspond pas. Sur toutes les pages biketomorrow et metrics si les identifiants ne sont pas bons, l'erreur "Wrong Id" est renvoyé. Nous avons utilisé les mêmes credentials que ceux fournis pour le projet Flask. 
+Enfin, dans une optique de gain de temps, nous nous sommes limités à une seule page metrics même si elle est duplicable aux autres modèles. Nous avons choisi de mettre en avant le modèle de la régression linéaire, car c'est celui qui avait porté les meilleurs résultats durant la première partie de notre projet. 
+
+
+Nous avons proposé des tests qui vérifient le bon fonctionnement des  routes présentées ci-dessus et renvoyant un message selon le modèle suivant : 
+
+==================================
+	test name
+==================================
+
+request done at "/{endpoint}"
+| username = {user}
+| password = {psw}
+| meteo = {meteo}
+| temperature = {temp}
+| number of bikes = {bike}
+| jour de la semaine = {day}
+
+
+expected result = {result}
+actual result = {status}
+
+=> {test}
+
+Avec la route et les variable utilisées puis le résultat attendu / résultat obtenu et enfin "FAILLURE" ou "SUCCES". 
+
+Enfin, nous avons créé des images Dockers pour le fichier principal de l'API et les tests et avons fait un déploiment avec Kubernetes à partir des fichiers :
+- my_deployment.yml: déploiement du pod avec 3 répliques
+- my_service.yml : exposition de l'API rendre disponible les trois répliques. On crée un Service de type ClusterIP.
+- my_ingress.yml : on crée un Ingress pour exposer le service à l'extérieur du cluster

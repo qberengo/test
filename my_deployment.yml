@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-deployment
+  labels:
+    app: my-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: my-app
+  template:
+    metadata: 
+      labels: 
+        app: my-app
+    spec:
+      containers:
+      - name: myapi
+        image: 590388/projet2_my_api:latest
+        ports:
+        - containerPort: 5000
+      - name: test-status
+        image: dinafl/projet2_test_status:latest
+        ports:
+        - containerPort: 5000
+      - name: test-authentification
+        image: dinafl/projet2_test_authentification:latest
+        ports:
+        - containerPort: 5000
+      - name: test-biketomorrow-lr
+        image: dinafl/projet2_test_biketomorrow_lr:latest
+        ports:
+        - containerPort: 5000
+      - name: test-metrics-lr
+        image: dinafl/projet2_test_metrics_lr:latest
+        ports:
+        - containerPort: 5000
+      - name: test-biketomorrow-logr
+        image: dinafl/projet2_test_biketomorrow_logr:latest
+        ports:
+        - containerPort: 5000
+      
+  
